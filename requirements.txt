@@ -1,0 +1,8 @@
+requests>=2.32,<3
+python-dotenv>=1.0,<2
+SpeechRecognition>=3.10,<4
+PyAudio>=0.2.14
+edge-tts>=6.1,<7
+pygame>=2.5,<3
+PyQt5>=5.15,<6
+reportlab>=4.0,<5
