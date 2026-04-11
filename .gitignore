@@ -26,4 +26,5 @@ Thumbs.db
 data/*.json
 data/*.db
 data/*.sqlite3
+data/models/
 !data/.gitkeep

@@ -2,6 +2,7 @@ import json
 import os
 import sqlite3
 from datetime import datetime
+from utils.personas import get_persona_meta, get_persona_options, normalize_persona_id
 
 
 SRC_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,9 +34,17 @@ def _default_user_profile():
 
 def _default_user_preferences():
     return {
+        "assistant_persona": "balanced",
         "preferred_language": "auto",
         "preferred_tone": "auto",
         "preferred_response_length": "auto",
+        "live_web_access": True,
+        "web_search_mode": "smart",
+        "preferred_news_region": "in",
+        "preferred_news_language": "en",
+        "news_output_style": "crisp_sources",
+        "news_freshness_hours": 24,
+        "news_fallback_mode": "ask_then_expand",
     }
 
 
@@ -64,16 +73,47 @@ def _safe_preferences(raw):
     if not isinstance(raw, dict):
         return preferences
 
+    assistant_persona = normalize_persona_id(raw.get("assistant_persona", "balanced"))
     language = str(raw.get("preferred_language", "auto")).strip().lower()
     tone = str(raw.get("preferred_tone", "auto")).strip().lower()
     response_length = str(raw.get("preferred_response_length", "auto")).strip().lower()
+    news_region = str(raw.get("preferred_news_region", "in")).strip().lower()
+    news_language = str(raw.get("preferred_news_language", "en")).strip().lower()
+    live_web_access = raw.get("live_web_access", True)
+    web_search_mode = str(raw.get("web_search_mode", "smart")).strip().lower()
+    news_output_style = str(raw.get("news_output_style", "crisp_sources")).strip().lower()
+    news_fallback_mode = str(raw.get("news_fallback_mode", "ask_then_expand")).strip().lower()
+    news_freshness_hours_raw = raw.get("news_freshness_hours", 24)
 
+    if assistant_persona in set(get_persona_options()):
+        preferences["assistant_persona"] = assistant_persona
     if language in {"auto", "english", "hindi", "hinglish"}:
         preferences["preferred_language"] = language
     if tone in {"auto", "friend-like", "professional-friendly"}:
         preferences["preferred_tone"] = tone
     if response_length in {"auto", "short", "detailed"}:
         preferences["preferred_response_length"] = response_length
+    if news_region in {"us", "in", "gb", "au", "ca"}:
+        preferences["preferred_news_region"] = news_region
+    if news_language in {"en", "hi"}:
+        preferences["preferred_news_language"] = news_language
+    if web_search_mode in {"off", "smart", "always"}:
+        preferences["web_search_mode"] = web_search_mode
+    if news_output_style in {"crisp_sources"}:
+        preferences["news_output_style"] = news_output_style
+    if news_fallback_mode in {"ask_then_expand"}:
+        preferences["news_fallback_mode"] = news_fallback_mode
+
+    try:
+        parsed_hours = int(news_freshness_hours_raw)
+    except Exception:
+        parsed_hours = 24
+    preferences["news_freshness_hours"] = min(72, max(1, parsed_hours))
+
+    if isinstance(live_web_access, bool):
+        preferences["live_web_access"] = live_web_access
+    elif isinstance(live_web_access, str):
+        preferences["live_web_access"] = live_web_access.strip().lower() in {"1", "true", "yes", "on"}
 
     return preferences
 
@@ -440,10 +480,12 @@ def get_user_profile_context():
         else inferred_style
     )
     final_tone = preferences["preferred_tone"] if preferences["preferred_tone"] != "auto" else inferred_tone
+    persona_id = normalize_persona_id(preferences.get("assistant_persona", "balanced"))
+    persona_label = get_persona_meta(persona_id).get("label", "Balanced")
 
     return (
-        f"User profile: language={final_language}, response_style={final_style}, "
-        f"tone_preference={final_tone}, workflow_focus={inferred_workflow}."
+        f"User profile: assistant_persona={persona_label}, language={final_language}, "
+        f"response_style={final_style}, tone_preference={final_tone}, workflow_focus={inferred_workflow}."
     )
 
 
@@ -458,6 +500,9 @@ def set_user_preferences(preferences):
 
     if isinstance(preferences, dict):
         merged = {
+            "assistant_persona": normalize_persona_id(
+                preferences.get("assistant_persona", current.get("assistant_persona", "balanced"))
+            ),
             "preferred_language": str(preferences.get("preferred_language", current["preferred_language"])).strip().lower(),
             "preferred_tone": str(preferences.get("preferred_tone", current["preferred_tone"])).strip().lower(),
             "preferred_response_length": str(
@@ -465,6 +510,31 @@ def set_user_preferences(preferences):
             )
             .strip()
             .lower(),
+            "live_web_access": bool(preferences.get("live_web_access", current.get("live_web_access", True))),
+            "web_search_mode": str(preferences.get("web_search_mode", current.get("web_search_mode", "smart")))
+            .strip()
+            .lower(),
+            "preferred_news_region": str(
+                preferences.get("preferred_news_region", current.get("preferred_news_region", "in"))
+            )
+            .strip()
+            .lower(),
+            "preferred_news_language": str(
+                preferences.get("preferred_news_language", current.get("preferred_news_language", "en"))
+            )
+            .strip()
+            .lower(),
+            "news_output_style": str(preferences.get("news_output_style", current.get("news_output_style", "crisp_sources")))
+            .strip()
+            .lower(),
+            "news_fallback_mode": str(
+                preferences.get("news_fallback_mode", current.get("news_fallback_mode", "ask_then_expand"))
+            )
+            .strip()
+            .lower(),
+            "news_freshness_hours": int(
+                preferences.get("news_freshness_hours", current.get("news_freshness_hours", 24))
+            ),
         }
         memory["user_preferences"] = _safe_preferences(merged)
         save_memory(memory)

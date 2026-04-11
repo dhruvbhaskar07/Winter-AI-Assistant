@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 from utils.file_search import search_file
 from utils.command_learning import learn_command
@@ -44,7 +45,11 @@ def open_file_by_name(file_name):
 
 def open_app(app_name):
     try:
-        os.system(f"start {app_name}")
+        target = str(app_name).strip().strip('"')
+        if not target:
+            return "Error opening app: empty app name"
+
+        subprocess.Popen(f'start "" "{target}"', shell=True)
         return f"Opened {app_name}"
     except Exception as e:
         return f"Error opening app: {str(e)}"

@@ -1,6 +1,11 @@
 import os
 import sys
 
+try:
+    import torch
+except ImportError:
+    pass
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(PROJECT_ROOT, "src")
 if PROJECT_ROOT not in sys.path:

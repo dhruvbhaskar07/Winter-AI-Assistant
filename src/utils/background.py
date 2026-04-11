@@ -33,17 +33,26 @@ def background_worker():
             payload = decision.get("payload", {})
             message = decision.get("message", f"Execute '{action_name}'")
 
-            # Strict consent mode: never execute anything without explicit user confirmation.
-            if not confirm_action(
-                f"Decision available: {message} (action={action_name}, confidence={decision['confidence']:.2f}). Proceed?"
-            ):
-                continue
-            else:
+            if decision.get("auto"):
                 result = _execute_action(action_name, payload)
                 if result is None:
                     continue
                 else:
                     result_message = f"AI: {result}"
                     print(result_message)
+                continue
+
+            # Strict consent mode: never execute anything without explicit user confirmation.
+            if not confirm_action(
+                f"Decision available: {message} (action={action_name}, confidence={decision['confidence']:.2f}). Proceed?"
+            ):
+                continue
+
+            result = _execute_action(action_name, payload)
+            if result is None:
+                continue
+            else:
+                result_message = f"AI: {result}"
+                print(result_message)
 
         time.sleep(20)
