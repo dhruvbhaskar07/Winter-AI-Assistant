@@ -6,29 +6,32 @@ Winter is a premium desktop AI assistant built with PyQt5 + Groq LLM integration
 
 ## 📸 Interface Showcase
 
-<p align="center">
-  <img src="assets/ui_chat.png" width="48%" alt="Chat Interface" />
-  <img src="assets/ui_settings.png" width="48%" alt="Settings Panel" />
-</p>
-
-<p align="center">
-  <b>Advanced Voice Selection</b><br/>
-  <img src="assets/voice_dropdown.png" width="97%" alt="Voice Selection" />
-</p>
+<table border="0">
+  <tr>
+    <td><img src="assets/ui_chat.png" width="100%" alt="Clean Chat Experience" /></td>
+    <td><img src="assets/ui_settings.png" width="100%" alt="Advanced Settings" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <b>Advanced Voice Identity Selector</b><br/>
+      <img src="assets/voice_dropdown.png" width="100%" alt="Categorized Voices" />
+    </td>
+  </tr>
+</table>
 
 ---
 
-## 🚀 Recent Modifications
+## 🚀 Key Features & Updates
 
-### 🎙️ Enhanced Multi-Engine TTS (Hindi/Hinglish)
-- **Categorized Voice Selection**: Organized by origin and quality (☁️ Cloud, 🎙️ Local HD, ⚡ Fast Local).
-- **Improved Hindi Phrasing**: Integrated **Google TTS (Divya)** and **Microsoft Edge Neural** for natural pronunciation.
-- **Dynamic Voice Testing**: Randomized Hindi/English phrases for realistic character previews.
+### 🎙️ Multi-Engine Hindi TTS
+- **Categorized Selection**: Cloud, Local HD, and Fast Local voice types.
+- **Natural Phrasing**: Integrated Google TTS & Edge Neural for perfect Hindi/Hinglish.
+- **Dynamic Previews**: Randomized phrases to test character tone and clarity.
 
-### 🧠 Core Improvements
-- **Unicode Support**: Crystal-clear Devanagari display with total UTF-8 stream synchronization.
-- **Smooth Animations**: Thread-safe UI updates for seamless bubble rendering.
-- **Project Sanitization**: Removed all legacy temporary scripts and test binaries.
+### 🧠 Intelligent Core
+- **Unicode Support**: Total UTF-8 synchronization for clean Devanagari (Hindi) text.
+- **Async Processing**: Thread-safe UI updates for smooth chat bubble rendering.
+- **Minimalist Footprint**: Fully sanitized project structure with zero clutter.
 
 ## 🏗️ Project Structure
 
@@ -39,10 +42,10 @@ Winter is a premium desktop AI assistant built with PyQt5 + Groq LLM integration
 - `.env`: Runtime configuration.
 
 ### Core (`src/`)
-- `src/ui_app.py`: Main PyQt5 UI, workers, and chat rendering.
-- `src/modules/command_handler.py`: Intent routing + AI/web orchestration.
-- `src/services/llm_service.py`: Groq API, System Prompts, and UTF-8 Stream handler.
-- `src/utils/voice.py`: STT/TTS Manager & Engines (Edge, Piper, Kokoro, gTTS).
+- `src/ui_app.py`: Main PyQt5 UI & worker orchestrator.
+- `src/modules/command_handler.py`: Intent routing + AI/web coordination.
+- `src/services/llm_service.py`: UTF-8 Stream handler & LLM logic.
+- `src/utils/voice.py`: Full STT/TTS Backend management.
 
 ## 🛠️ Setup & Installation
 
@@ -57,10 +60,4 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-Copy `.env.example` to `.env` and configure your `API_KEY`.
-
-## 🧪 Example Commands
-- *"Latest tech news batao"* (Web-augmented search)
-- *"Organize my downloads"* (File automation)
-- *"Kya scene hai? Kaise ho?"* (Natural conversation)
-- *"Naya folder banao Desktop pe"* (System control)
+Copy `.env.example` to `.env` and set your `API_KEY`.
