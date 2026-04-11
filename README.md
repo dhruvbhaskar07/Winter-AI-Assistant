@@ -2,33 +2,33 @@
 
 Winter is a premium desktop AI assistant built with PyQt5 + Groq LLM integration. It features high-fidelity voice output, multi-engine Hindi TTS, and a modern, glassmorphism-inspired dark UI.
 
+---
+
+## 📸 Interface Showcase
+
+<p align="center">
+  <img src="assets/ui_chat.png" width="48%" alt="Chat Interface" />
+  <img src="assets/ui_settings.png" width="48%" alt="Settings Panel" />
+</p>
+
+<p align="center">
+  <b>Advanced Voice Selection</b><br/>
+  <img src="assets/voice_dropdown.png" width="97%" alt="Voice Selection" />
+</p>
+
+---
+
 ## 🚀 Recent Modifications
 
 ### 🎙️ Enhanced Multi-Engine TTS (Hindi/Hinglish)
-- **Categorized Voice Selection**: Voices are now organized by origin and quality:
-  - **☁️ Cloud Voices**: High-fidelity Microsoft Edge and Google TTS models.
-  - **🎙️ Local HD Voices**: High-definition Piper neural voices (Work 100% offline).
-  - **⚡ Fast Local Voices**: Lightweight Kokoro models optimized for speed.
-  - **💾 Legacy Voices**: Backward compatibility for older ONNX models.
-- **Improved Hindi Phrasing**: Integrated **Google TTS (Divya)** for exceptionally natural Hinglish and proper Hindi pronunciation.
-- **Dynamic Voice Testing**: "Test Identity" now uses randomized Hindi/English phrases to give a realistic preview of the character's tone.
+- **Categorized Voice Selection**: Organized by origin and quality (☁️ Cloud, 🎙️ Local HD, ⚡ Fast Local).
+- **Improved Hindi Phrasing**: Integrated **Google TTS (Divya)** and **Microsoft Edge Neural** for natural pronunciation.
+- **Dynamic Voice Testing**: Randomized Hindi/English phrases for realistic character previews.
 
 ### 🧠 Core Improvements
-- **Unicode Support**: Fixed a critical text streaming bug where Hindi characters and punctuation were corrupted. Stream now uses forced UTF-8 encoding for crystal-clear Devanagari display.
-- **Smooth Animations**: Refined UI thread handling to ensure chat bubbles and autoscroll work seamlessly during intensive AI thinking/speaking.
-
-## 📸 Media Showcase
-
-*Winter AI - Modern Chat Experience*
-![Winter UI Chat](assets/ui_chat.png)
-
-*Advanced Settings & Voice Profiling*
-![Winter UI Settings](assets/ui_settings.png)
-
-*Categorized Voice Identity Selector*
-![Voice Dropdown](assets/voice_dropdown.png)
-
----
+- **Unicode Support**: Crystal-clear Devanagari display with total UTF-8 stream synchronization.
+- **Smooth Animations**: Thread-safe UI updates for seamless bubble rendering.
+- **Project Sanitization**: Removed all legacy temporary scripts and test binaries.
 
 ## 🏗️ Project Structure
 
@@ -42,7 +42,7 @@ Winter is a premium desktop AI assistant built with PyQt5 + Groq LLM integration
 - `src/ui_app.py`: Main PyQt5 UI, workers, and chat rendering.
 - `src/modules/command_handler.py`: Intent routing + AI/web orchestration.
 - `src/services/llm_service.py`: Groq API, System Prompts, and UTF-8 Stream handler.
-- `src/utils/voice.py`: STT/TTS Manager & Multiple Engine Backends (Edge, Piper, Kokoro, gTTS).
+- `src/utils/voice.py`: STT/TTS Manager & Engines (Edge, Piper, Kokoro, gTTS).
 
 ## 🛠️ Setup & Installation
 
@@ -60,12 +60,7 @@ pip install -r requirements.txt
 Copy `.env.example` to `.env` and configure your `API_KEY`.
 
 ## 🧪 Example Commands
-- *"Latest tech news batao"* (Triggers web-augmented search)
-- *"Organize my downloads"* (Launches file automation)
-- *"Kya scene hai? Kaise ho?"* (Natural conversational mode)
+- *"Latest tech news batao"* (Web-augmented search)
+- *"Organize my downloads"* (File automation)
+- *"Kya scene hai? Kaise ho?"* (Natural conversation)
 - *"Naya folder banao Desktop pe"* (System control)
-
-## 🔧 Troubleshooting
-- **Hindi Layout Issues**: Ensure your system font supports Devanagari (Roboto/Inter recommended).
-- **Voice Lag**: For local voices, the first use triggers a one-time download (~20-50MB).
-- **HTTP 403 (Edge TTS)**: The system automatically falls back to **Google TTS** if Microsoft Edge is blocked by your ISP/Network.
